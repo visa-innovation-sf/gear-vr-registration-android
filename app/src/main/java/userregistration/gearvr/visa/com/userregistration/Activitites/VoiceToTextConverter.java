@@ -156,7 +156,7 @@ public class VoiceToTextConverter extends AppCompatActivity implements
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 Log.d("service_call",response.toString());
-                Toast.makeText(getApplicationContext(),"Successful response",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(),"Successful response",Toast.LENGTH_SHORT).show();
             }
 
             @Override
