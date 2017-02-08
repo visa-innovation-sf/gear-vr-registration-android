@@ -43,9 +43,10 @@ public class VoiceToTextConverter extends AppCompatActivity implements
         voiceCommand = (ImageView) findViewById(R.id.imageView1);
         user = (User) getIntent().getSerializableExtra("userData");
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if(actionBar != null) {
             actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header));
-
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
         progressBar.setVisibility(View.INVISIBLE);
         speech = SpeechRecognizer.createSpeechRecognizer(this);
         speech.setRecognitionListener(this);

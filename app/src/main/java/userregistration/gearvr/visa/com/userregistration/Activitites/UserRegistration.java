@@ -1,14 +1,11 @@
 package userregistration.gearvr.visa.com.userregistration.Activitites;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,12 +28,12 @@ import userregistration.gearvr.visa.com.userregistration.Model.User;
 public class UserRegistration extends AppCompatActivity {
 
 
-    Button b, button2;
-    CircleImageView img;
+    Button save;
+    CircleImageView selfie;
     Uri file;
-    EditText fName,lName, mail;
-    String firstName,lastName,email,profileImage;
-    String[]  receiptUrls;
+    EditText fName, lName, mail;
+    String firstName, lastName, email, profileImage;
+    String[] receiptUrls;
     private boolean tookPhoto = false;
     Bitmap imageBitmap;
 
@@ -46,27 +43,24 @@ public class UserRegistration extends AppCompatActivity {
         setContentView(R.layout.activity_user_registration);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header));
-        button2 = (Button) findViewById(R.id.button2);
-        img = (CircleImageView) findViewById(R.id.imageView1);
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header));
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+        save = (Button) findViewById(R.id.saveBtn);
+        selfie = (CircleImageView) findViewById(R.id.selfieImg);
         fName = (EditText) findViewById(R.id.firstName);
         lName = (EditText) findViewById(R.id.lastName);
         mail = (EditText) findViewById(R.id.email);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            b.setEnabled(false);
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-        }
-
-        img.setOnClickListener(new View.OnClickListener() {
+        selfie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 takePicture();
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -75,7 +69,7 @@ public class UserRegistration extends AppCompatActivity {
                 email = mail.getText().toString();
 
                 User user = constructUserModel();
-                Intent i = new Intent(getApplicationContext(),VoiceToTextConverter.class);
+                Intent i = new Intent(getApplicationContext(), VoiceToTextConverter.class);
                 i.putExtra("userData", user);
                 startActivity(i);
             }
@@ -100,7 +94,7 @@ public class UserRegistration extends AppCompatActivity {
         });
     }
 
-    private User constructUserModel(){
+    private User constructUserModel() {
         return new User.UserBuilder()
                 .setFirstName(firstName)
                 .setLastName(lastName)
@@ -109,16 +103,6 @@ public class UserRegistration extends AppCompatActivity {
                 .setProfileImage(profileImage)
                 .settookPhoto(tookPhoto)
                 .build();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 0) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                b.setEnabled(true);
-            }
-        }
     }
 
     public void takePicture() {
@@ -133,18 +117,18 @@ public class UserRegistration extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 tookPhoto = true;
                 imageBitmap = (Bitmap) data.getExtras().get("data");
-                imageBitmap = Bitmap.createScaledBitmap(imageBitmap,400,300,false);
-                img.setImageBitmap(imageBitmap);
+                imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 400, 300, false);
+                selfie.setImageBitmap(imageBitmap);
                 profileImage = convertToBase64(imageBitmap);
             }
         }
     }
 
-    public static String convertToBase64(final Bitmap bitmap){
+    public static String convertToBase64(final Bitmap bitmap) {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
         return "data:image/png;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 

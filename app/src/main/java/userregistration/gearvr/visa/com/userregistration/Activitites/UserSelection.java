@@ -15,8 +15,8 @@ import userregistration.gearvr.visa.com.userregistration.Model.User;
 public class UserSelection extends AppCompatActivity {
 
     private static final int SPEECH_REQUEST_CODE = 0;
-    private Button b;
-    private Spinner s;
+    private Button startSession;
+    private Spinner userChoice;
     public static final String BASE_URL = "http://172.16.1.172:5252/";
     User user;
 
@@ -24,24 +24,25 @@ public class UserSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selection);
-        b= (Button) findViewById(R.id.button);
-        s = (Spinner) findViewById(R.id.spinner);
+        startSession = (Button) findViewById(R.id.session);
+        userChoice = (Spinner) findViewById(R.id.selection);
         user = (User) getIntent().getSerializableExtra("userData");
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if(actionBar != null) {
             actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header));
-
-        b.setOnClickListener(new View.OnClickListener() {
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+        startSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String choice = s.getSelectedItem().toString();
+                String choice = userChoice.getSelectedItem().toString();
                 user.setExperiences_choice(choice);
                 sendIntentToUnity(user);
             }
         });
 
-        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        userChoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                // sendIntentToUnity(user);
